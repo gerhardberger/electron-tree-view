@@ -1,0 +1,7 @@
+"extends": "standard"
+"ecmaFeatures": {
+  "jsx": true
+}
+"rules": {
+  "comma-style": [0, "first"]
+}

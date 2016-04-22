@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>electron tree view</title>
+
+    <script type="text/javascript">
+      window.onload = () => {
+        const root = {
+          name: 'foo',
+          children: [{
+            name: 'bar',
+            children: [{
+              name: 'bar',
+              children: [{
+                name: 'bar',
+                children: []
+              }, {
+                name: 'baz',
+                children: []
+              }]
+            }]
+          }, {
+            name: 'baz',
+            children: []
+          }]
+        }
+
+        const button = document.createElement('button')
+        button.innerText = 'click me'
+        button.addEventListener('click', event => {
+          root.children.push({ name: 'foo', children: [] },
+            { name: 'bar', children: [] })
+
+          tree.loop.update({ root })
+        }, false)
+        // document.querySelector('.container').appendChild(button)
+
+        const tree = require('../')({
+          root,
+          children: c => c.children,
+          label: c => c.name,
+          container: document.querySelector('.container')
+        })
+
+        tree.on('selected', elem => {
+          elem.children.push({ name: 'foo', children: [] },
+            { name: 'bar', children: [] })
+
+          tree.loop.update({ root })
+
+          console.log('selected')
+        })
+
+        tree.on('deselected', elem => {
+          console.log('deselected')
+        })
+      }
+    </script>
+  </head>
+  <body>
+    <div class="container"></div>
+  </body>
+</html>

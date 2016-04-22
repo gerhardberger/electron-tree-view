@@ -1,0 +1,50 @@
+.tree-view li {
+  list-style: none;
+
+  padding-bottom: 6px;
+}
+
+.tree-view ul {
+  display: none;
+
+  margin: 0;
+  padding: 6px 0 0 18px;
+}
+
+.tree-view .selected > ul {
+  display: block;
+}
+
+.tree-view .elem .chevron {
+  transition: transform .1s ease-out;
+}
+
+.tree-view .selected > a > div > .chevron {
+  transform: rotate(90deg);
+}
+
+.tree-view .active > a > div > span {
+  font-weight: bold;
+}
+
+.tree-view .header {
+  text-decoration: none;
+  text-transform: uppercase;
+  color: black;
+  font-family: Arial, sans-serif;
+  font-size: 12px;
+  letter-spacing: 1px;
+}
+
+.tree-view .header > div {
+  position: relative;
+
+  padding-left: 18px;
+}
+
+.tree-view .header > div > img {
+  position: absolute;
+  left: 0;
+  top: 0;
+  margin: -1px 0 0 1px;
+}
