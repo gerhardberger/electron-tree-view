@@ -49,8 +49,8 @@ creates a new tree view. the `opts` object can contain:
 - `children`: by default the program checks for the `children` property of a tree node to add children, but if it called something else, or you want custom behaviour, then implement this `function` that returns the children as an `array`.
 - `label`: by default the program checks for the `name` property of a tree node to display a text for a node, but if it called something else, or you want custom behaviour, then implement this `function` that returns a `string` to display.
 
-#### tree.on('selected', item => {})
+#### `tree.on('selected', item => {})`
 fires when an `item` has been clicked.
 
-#### tree.on('deselected', item => {})
+#### `tree.on('deselected', item => {})`
 fires when an `item` has been clicked again and it closed.
