@@ -1,12 +1,10 @@
-'use strict'
+const { app, BrowserWindow } = require('electron')
 
-const electron = require('electron')
-
-electron.app.on('ready', () => {
-  var win = new electron.BrowserWindow({ width: 800, height: 600 })
+app.on('ready', () => {
+  let win = new BrowserWindow({ width: 800, height: 600 })
 
   win.on('closed', () => { win = null })
   win.loadURL(`file://${__dirname}/index.html`)
 
-  // win.webContents.openDevTools({ detach: true })
+  win.webContents.openDevTools({ detach: true })
 })

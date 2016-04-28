@@ -12,6 +12,7 @@ const hx = hyperx(vdom.h)
 module.exports = function (opts) {
   const self = new events.EventEmitter()
   const root = opts.root
+  var selected = null
 
   // injecting css
   const browser = opts.browser || electron.remote.getCurrentWindow()
@@ -26,7 +27,20 @@ module.exports = function (opts) {
     LoadHook.prototype.hook = function (node) { elem = node }
 
     const clickelem = event => {
-      elem.classList.toggle('selected')
+      if (selected === data) {
+        elem.classList.remove('selected')
+
+        self.emit('deselected', data)
+
+        selected = null
+      } else {
+        elem.classList.add('selected')
+
+        self.emit('selected', data)
+        if (selected) self.emit('deselected', selected)
+
+        selected = data
+      }
 
       const elems = opts.container.querySelectorAll('.tree-view .elem')
       for (let i = 0; i < elems.length; ++i) {
@@ -35,11 +49,11 @@ module.exports = function (opts) {
 
       elem.classList.add('active')
 
-      if (elem.classList.contains('selected')) {
+      /* if (elem.classList.contains('selected')) {
         self.emit('selected', data)
       } else {
         self.emit('deselected', data)
-      }
+      }*/
     }
 
     const createChild = c => hx`<li>${traverse(c)}</li>`
