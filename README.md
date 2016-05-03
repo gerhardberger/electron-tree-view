@@ -54,3 +54,6 @@ fires when an `item` has been clicked.
 
 #### `tree.on('deselected', item => {})`
 fires when an `item` has been clicked again and it closed.
+
+#### `tree.select(node)`
+selects `node` of the tree programatically.

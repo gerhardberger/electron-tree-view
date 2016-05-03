@@ -48,12 +48,6 @@ module.exports = function (opts) {
       }
 
       elem.classList.add('active')
-
-      /* if (elem.classList.contains('selected')) {
-        self.emit('selected', data)
-      } else {
-        self.emit('deselected', data)
-      }*/
     }
 
     const createChild = c => hx`<li>${traverse(c)}</li>`
@@ -76,6 +70,37 @@ module.exports = function (opts) {
 
   const loop = self.loop = main({ root }, render, vdom)
   opts.container.appendChild(loop.target)
+
+  const selectTraverse = (current, node, dom) => {
+    if (current === node) {
+      dom.classList.add('selected')
+      dom.classList.add('active')
+
+      self.emit('selected', node)
+      if (selected) self.emit('deselected', selected)
+      selected = node
+
+      return true
+    }
+    if (current.children) {
+      var shouldSelect = false
+      current.children.forEach((c, ix) => {
+        const didFound = selectTraverse(c, node
+          , dom.querySelectorAll('.elem')[ix])
+        if (didFound) shouldSelect = true
+      })
+
+      if (shouldSelect) {
+        dom.classList.add('selected')
+      }
+      return shouldSelect
+    }
+  }
+
+  self.select = node => {
+    selectTraverse(root, node
+      , opts.container.querySelector('.tree-view > .elem'))
+  }
 
   return self
 }
