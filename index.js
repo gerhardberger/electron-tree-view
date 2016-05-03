@@ -82,9 +82,11 @@ module.exports = function (opts) {
 
       return true
     }
-    if (current.children) {
+
+    const children = opts.children ? opts.children(current) : (current.children || [])
+    if (children) {
       var shouldSelect = false
-      current.children.forEach((c, ix) => {
+      children.forEach((c, ix) => {
         const didFound = selectTraverse(c, node
           , dom.querySelectorAll('.elem')[ix])
         if (didFound) shouldSelect = true
