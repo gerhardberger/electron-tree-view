@@ -13,6 +13,7 @@ module.exports = function (opts) {
   const self = new events.EventEmitter()
   const root = opts.root
   var selected = null
+  var selectedDom = null
 
   // injecting css
   const browser = opts.browser || electron.remote.getCurrentWindow()
@@ -33,6 +34,7 @@ module.exports = function (opts) {
         self.emit('deselected', data)
 
         selected = null
+        selectedDom = null
       } else {
         elem.classList.add('selected')
 
@@ -40,6 +42,7 @@ module.exports = function (opts) {
         if (selected) self.emit('deselected', selected)
 
         selected = data
+        selectedDom = elem
       }
 
       const elems = opts.container.querySelectorAll('.tree-view .elem')
@@ -77,8 +80,13 @@ module.exports = function (opts) {
       dom.classList.add('active')
 
       self.emit('selected', node)
-      if (selected) self.emit('deselected', selected)
+      if (selected) {
+        self.emit('deselected', selected)
+        selectedDom.classList.remove('active')
+        selectedDom.classList.remove('selected')
+      }
       selected = node
+      selectedDom = dom
 
       return true
     }
@@ -88,7 +96,7 @@ module.exports = function (opts) {
       var shouldSelect = false
       children.forEach((c, ix) => {
         const didFound = selectTraverse(c, node
-          , dom.querySelectorAll('.elem')[ix])
+          , dom.querySelectorAll(':scope > ul > li > .elem')[ix])
         if (didFound) shouldSelect = true
       })
 
