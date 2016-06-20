@@ -48,6 +48,7 @@ creates a new tree view. the `opts` object can contain:
 - `container`: a DOM node to which the tree will be appended. **required**
 - `children`: by default the program checks for the `children` property of a tree node to add children, but if it called something else, or you want custom behaviour, then implement this `function` that returns the children as an `array`.
 - `label`: by default the program checks for the `name` property of a tree node to display a text for a node, but if it called something else, or you want custom behaviour, then implement this `function` that returns a `string` to display.
+- `filter`: a function (`Child => Boolean`) that can determine which child element to let through to display. This can be used to hide certain children nodes.
 
 #### `tree.on('selected', item => {})`
 fires when an `item` has been clicked.

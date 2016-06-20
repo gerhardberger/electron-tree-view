@@ -1,6 +1,6 @@
 {
   "name": "electron-tree-view",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "A tree viewer for Electron webviews with virtual dom.",
   "main": "index.js",
   "scripts": {

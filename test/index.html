@@ -19,9 +19,15 @@
                 name: 'baz',
                 children: []
               }]
+            }, {
+              name: 'secret',
+              children: []
             }]
           }, {
             name: 'baz',
+            children: []
+          }, {
+            name: 'secret',
             children: []
           }]
         }
@@ -40,7 +46,8 @@
           root,
           children: c => c.children,
           label: c => c.name,
-          container: document.querySelector('.container')
+          container: document.querySelector('.container'),
+          filter: c => (c.name !== 'secret')
         })
 
         tree.on('selected', elem => {

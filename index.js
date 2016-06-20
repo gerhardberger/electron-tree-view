@@ -12,6 +12,7 @@ const hx = hyperx(vdom.h)
 module.exports = function (opts) {
   const self = new events.EventEmitter()
   const root = opts.root
+  const filter = opts.filter
   var selected = null
   var selectedDom = null
 
@@ -21,7 +22,10 @@ module.exports = function (opts) {
   browser.webContents.insertCSS(data)
 
   const traverse = data => {
-    const children = opts.children ? opts.children(data) : (data.children || [])
+    let children = opts.children ? opts.children(data) : (data.children || [])
+    if (filter) {
+      children = children.filter(filter)
+    }
     var elem = null
 
     var LoadHook = function () {}
@@ -91,7 +95,12 @@ module.exports = function (opts) {
       return true
     }
 
-    const children = opts.children ? opts.children(current) : (current.children || [])
+    let children = opts.children ? opts.children(current)
+      : (current.children || [])
+    if (filter) {
+      children = children.filter(filter)
+    }
+
     if (children) {
       var shouldSelect = false
       children.forEach((c, ix) => {
