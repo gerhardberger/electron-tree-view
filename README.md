@@ -49,6 +49,7 @@ creates a new tree view. the `opts` object can contain:
 - `children`: by default the program checks for the `children` property of a tree node to add children, but if it called something else, or you want custom behaviour, then implement this `function` that returns the children as an `array`.
 - `label`: by default the program checks for the `name` property of a tree node to display a text for a node, but if it called something else, or you want custom behaviour, then implement this `function` that returns a `string` to display.
 - `filter`: a function (`Child => Boolean`) that can determine which child element to let through to display. This can be used to hide certain children nodes.
+- overwrite rendering of nodes - see [overwriting rendering](#overwriting-rendering) below.
 
 #### `tree.on('selected', item => {})`
 fires when an `item` has been clicked.
@@ -58,3 +59,63 @@ fires when an `item` has been clicked again and it closed.
 
 #### `tree.select(node)`
 selects `node` of the tree programatically.
+
+## overwriting rendering
+
+#### `opts.renderParent = (hx, children) => {}`
+overwrite the rendering of the parent element.
+- `hx` template string function used for rendering dom nodes
+- `children` string containing traversed children
+
+default:
+```
+(hx, children) => {
+  return hx`<div class="tree-view">${children}</div>`
+}
+```
+
+notes:
+* make sure you include the `tree-view` class
+
+#### `opts.renderItem = (hx, data, children, loadHook, clickelem, createChild) => {}`
+overwrite the rendering of each node.
+- `hx` template string function used for rendering dom nodes
+- `data` data for the current node being rendered
+- `children` array of children below the current node
+- `loadHook` hook to setup the click handler properly
+- `clickelem` click handler to attach to the anchor
+- `createChild` function used to render child nodes
+
+default:
+```
+(hx, data, children, loadHook, clickelem, createChild) => {
+  return hx`<div class="elem" loaded=${loadHook}>
+    <a href="#" class="header" onclick=${clickelem}>
+      <div>
+        ${children.length === 0 ? '' : hx`<img src="${__dirname + '/images/chevron.png'}" class="chevron" />`}
+        <span>${opts.label ? opts.label(data) : data.name}</span>
+      </div>
+    </a>
+    <ul>
+      ${children.map(createChild)}
+    </ul>
+  </div>`
+}
+```
+
+notes:
+* make sure the parent element includes the `loaded` attribute set to `loadHook`
+* make sure a clickable element has `onclick` attribute set to `clickelem`
+* make sure the parent element has the class `elem`
+* you can't use `opts` here; label function will not be used
+
+#### `opts.renderChild = (hx, children) => {}`
+overwrite the rendering of a child node.
+- `hx` template string function used for rendering dom nodes
+- `children` string containing traversed child
+
+default:
+```
+(hx, children) => {
+  return hx`<li>${children}</li>`
+}
