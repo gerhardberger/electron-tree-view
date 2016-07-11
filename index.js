@@ -14,13 +14,13 @@ module.exports = function (opts) {
   const root = opts.root
   const filter = opts.filter
 
-  const renderParent = opts.renderParent || ((hx, children) => {
+  const renderRoot = opts.renderRoot || ((hx, children) => {
     return hx`<div class="tree-view">${children}</div>`
   })
 
-  const renderItem = opts.renderItem || ((hx, data, children, loadHook, clickelem, createChild) => {
+  const renderItem = opts.renderItem || ((hx, data, children, loadHook, clickElem, createChild) => {
     return hx`<div class="elem" loaded=${loadHook}>
-      <a href="#" class="header" onclick=${clickelem}>
+      <a href="#" class="header" onclick=${clickElem}>
         <div>
          ${children.length === 0 ? '' : hx`<img src="${__dirname + '/images/chevron.png'}" class="chevron" />`}
          <span>${opts.label ? opts.label(data) : data.name}</span>
@@ -52,7 +52,7 @@ module.exports = function (opts) {
     var LoadHook = function () {}
     LoadHook.prototype.hook = function (node) { elem = node }
 
-    const clickelem = event => {
+    const clickElem = event => {
       if (selected === data) {
         elem.classList.remove('selected')
 
@@ -82,7 +82,7 @@ module.exports = function (opts) {
 
     function createItem () {
       const loadHook = new LoadHook()
-      return renderItem(hx, data, children, loadHook, clickelem, createChild)
+      return renderItem(hx, data, children, loadHook, clickElem, createChild)
     }
 
     function createChild (c) {
@@ -91,7 +91,7 @@ module.exports = function (opts) {
   }
 
   const render = self.render = state => {
-    return renderParent(hx, traverse(state.root))
+    return renderRoot(hx, traverse(state.root))
   }
 
   const loop = self.loop = main({ root }, render, vdom)

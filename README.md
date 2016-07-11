@@ -62,13 +62,13 @@ selects `node` of the tree programatically.
 
 ## overwriting rendering
 
-#### `opts.renderParent = (hx, children) => {}`
-overwrite the rendering of the parent element.
+#### `opts.renderRoot = (hx, children) => {}`
+overwrite the rendering of the root element.
 - `hx` template string function used for rendering dom nodes
 - `children` string containing traversed children
 
 default:
-```
+``` js
 (hx, children) => {
   return hx`<div class="tree-view">${children}</div>`
 }
@@ -77,20 +77,20 @@ default:
 notes:
 * make sure you include the `tree-view` class
 
-#### `opts.renderItem = (hx, data, children, loadHook, clickelem, createChild) => {}`
+#### `opts.renderItem = (hx, data, children, loadHook, clickElem, createChild) => {}`
 overwrite the rendering of each node.
 - `hx` template string function used for rendering dom nodes
 - `data` data for the current node being rendered
 - `children` array of children below the current node
 - `loadHook` hook to setup the click handler properly
-- `clickelem` click handler to attach to the anchor
+- `clickElem` click handler to attach to the anchor
 - `createChild` function used to render child nodes
 
 default:
-```
-(hx, data, children, loadHook, clickelem, createChild) => {
+``` js
+(hx, data, children, loadHook, clickElem, createChild) => {
   return hx`<div class="elem" loaded=${loadHook}>
-    <a href="#" class="header" onclick=${clickelem}>
+    <a href="#" class="header" onclick=${clickElem}>
       <div>
         ${children.length === 0 ? '' : hx`<img src="${__dirname + '/images/chevron.png'}" class="chevron" />`}
         <span>${opts.label ? opts.label(data) : data.name}</span>
@@ -105,7 +105,7 @@ default:
 
 notes:
 * make sure the parent element includes the `loaded` attribute set to `loadHook`
-* make sure a clickable element has `onclick` attribute set to `clickelem`
+* make sure a clickable element has `onclick` attribute set to `clickElem`
 * make sure the parent element has the class `elem`
 * you can't use `opts` here; label function will not be used
 
@@ -115,7 +115,8 @@ overwrite the rendering of a child node.
 - `children` string containing traversed child
 
 default:
-```
+``` js
 (hx, children) => {
   return hx`<li>${children}</li>`
 }
+```
