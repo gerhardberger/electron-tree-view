@@ -13,6 +13,27 @@ module.exports = function (opts) {
   const self = new events.EventEmitter()
   const root = opts.root
   const filter = opts.filter
+
+  const renderRoot = opts.renderRoot || ((hx, children) => {
+    return hx`<div class="tree-view">${children}</div>`
+  })
+
+  const renderItem = opts.renderItem || ((hx, data, children, loadHook, clickElem, createChild) => {
+    return hx`<div class="elem" loaded=${loadHook}>
+      <a href="#" class="header" onclick=${clickElem}>
+        <div>
+         ${children.length === 0 ? '' : hx`<img src="${__dirname + '/images/chevron.png'}" class="chevron" />`}
+         <span>${opts.label ? opts.label(data) : data.name}</span>
+        </div>
+      </a>
+      <ul>${children.map(createChild)}</ul>
+    </div>`
+  })
+
+  const renderChild = opts.renderChild || ((hx, children) => {
+    return hx`<li>${children}</li>`
+  })
+
   var selected = null
   var selectedDom = null
 
@@ -31,7 +52,7 @@ module.exports = function (opts) {
     var LoadHook = function () {}
     LoadHook.prototype.hook = function (node) { elem = node }
 
-    const clickelem = event => {
+    const clickElem = event => {
       if (selected === data) {
         elem.classList.remove('selected')
 
@@ -57,22 +78,20 @@ module.exports = function (opts) {
       elem.classList.add('active')
     }
 
-    const createChild = c => hx`<li>${traverse(c)}</li>`
+    return createItem()
 
-    return hx`<div class="elem" loaded=${new LoadHook()}>
-      <a href="#" class="header" onclick=${clickelem}>
-        <div>
-          ${children.length === 0 ? '' : hx`
-            <img src="${__dirname + '/images/chevron.png'}" class="chevron" />`}
-          <span>${opts.label ? opts.label(data) : data.name}</span>
-        </div>
-      </a>
-      <ul>${children.map(createChild)}</ul>
-    </div>`
+    function createItem () {
+      const loadHook = new LoadHook()
+      return renderItem(hx, data, children, loadHook, clickElem, createChild)
+    }
+
+    function createChild (c) {
+      return renderChild(hx, traverse(c))
+    }
   }
 
   const render = self.render = state => {
-    return hx`<div class="tree-view">${traverse(state.root)}</div>`
+    return renderRoot(hx, traverse(state.root))
   }
 
   const loop = self.loop = main({ root }, render, vdom)

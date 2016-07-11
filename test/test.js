@@ -6,5 +6,5 @@ app.on('ready', () => {
   win.on('closed', () => { win = null })
   win.loadURL(`file://${__dirname}/index.html`)
 
-  win.webContents.openDevTools({ detach: true })
+  // win.webContents.openDevTools({ detach: true })
 })
