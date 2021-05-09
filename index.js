@@ -22,7 +22,7 @@ module.exports = function (opts) {
     return hx`<div class="elem" loaded=${loadHook}>
       <a href="#" class="header" onclick=${clickElem}>
         <div>
-         ${children.length === 0 ? '' : hx`<img src="${__dirname + '/images/chevron.png'}" class="chevron" />`}
+         ${ typeof children === 'undefined' || children.length === 0 ? '' : hx`<img src="${__dirname + '/images/chevron.png'}" class="chevron" />`}
          <span>${opts.label ? opts.label(data) : data.name}</span>
         </div>
       </a>
@@ -44,6 +44,10 @@ module.exports = function (opts) {
 
   const traverse = data => {
     let children = opts.children ? opts.children(data) : (data.children || [])
+    if (typeof children === 'undefined'){
+      children = []
+    }
+
     if (filter) {
       children = children.filter(filter)
     }

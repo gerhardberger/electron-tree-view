@@ -21,12 +21,14 @@
               }]
             }, {
               name: 'secret',
-              children: []
             }]
           }, {
             name: 'baz',
             children: []
           }, {
+            name: 'test'
+          },
+          {
             name: 'secret',
             children: []
           }]
@@ -51,8 +53,11 @@
         })
 
         tree.on('selected', elem => {
+          if(typeof elem.children === 'undefined'){
+            elem['children']=[]
+          }
           elem.children.push({ name: 'foo', children: [] },
-            { name: 'bar', children: [] })
+            { name: 'bar', children: [] }, { name: 'test'})
 
           tree.loop.update({ root })
 
